@@ -4,30 +4,50 @@ import { useEffect, useState } from 'react';
 const ARScanner = () => {
   const [mounted, setMounted] = useState(false);
   const [scriptsLoaded, setScriptsLoaded] = useState(false);
+  const [debugMsg, setDebugMsg] = useState("Iniciando...");
 
   useEffect(() => {
     setMounted(true);
-    const loadScript = (src) => {
-      return new Promise((resolve) => {
+    const loadScript = (src, name) => {
+      return new Promise((resolve, reject) => {
         if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
+        setDebugMsg(`Cargando ${name}...`);
         const script = document.createElement('script');
         script.src = src;
         script.onload = resolve;
+        script.onerror = () => reject(new Error(name));
         document.head.appendChild(script);
       });
     };
 
     const loadAll = async () => {
-      await loadScript('https://aframe.io/releases/1.5.0/aframe.min.js');
-      await loadScript('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js');
-      await loadScript("https://raw.githack.com/fcor/aframe-gesture-detector-component/master/dist/aframe-gesture-detector.min.js");
-      await loadScript("https://raw.githack.com/fcor/aframe-gesture-detector-component/master/dist/gesture-handler.js");
-      setScriptsLoaded(true);
+      try {
+        await loadScript('https://aframe.io/releases/1.5.0/aframe.min.js', 'Motor 3D');
+        await loadScript('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js', 'AR Core');
+        setScriptsLoaded(true);
+      } catch (e) {
+        setDebugMsg(`Error en ${e.message}`);
+      }
     };
     loadAll();
+
+    return () => {
+      const scene = document.querySelector('a-scene');
+      if (scene) scene.remove();
+      const video = document.querySelector('video');
+      if (video) video.remove();
+    };
   }, []);
 
-  if (!mounted || !scriptsLoaded) return <div className="bg-black h-screen flex items-center justify-center text-yellow-400">CARGANDO MODELOS 3D...</div>;
+  if (!mounted || !scriptsLoaded) {
+    return (
+      <div className="scanner-container flex flex-col items-center justify-center bg-black text-yellow-400 font-mono" style={{ height: '100vh' }}>
+        <div className="text-xl mb-4 animate-pulse">SISTEMA: CARGANDO</div>
+        <div className="text-[10px] mb-8">{debugMsg}</div>
+        <button onClick={() => setScriptsLoaded(true)} className="border border-yellow-400 px-4 py-2 text-[10px]">FORZAR INICIO</button>
+      </div>
+    );
+  }
 
   return (
     <div className="scanner-container">
@@ -36,40 +56,39 @@ const ARScanner = () => {
       <a-scene
         mindar-image="imageTargetSrc: /targets.mind; autoStart: true; uiLoading: yes;"
         embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights"
-        xr-mode-ui="enabled: false" gesture-detector
-        style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh' }}
+        xr-mode-ui="enabled: false"
+        style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 5 }}
       >
-        <a-assets>
-          {/* Aquí es donde cargarías tus modelos locales descargados */}
-          {/* <a-asset-item id="celulaModel" src="/models/celula_eucariota.glb"></a-asset-item> */}
-        </a-assets>
-
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
         {/* --- CÉLULA PROCARIOTA --- */}
         <a-entity mindar-image-target="targetIndex: 0">
-           <a-entity gesture-handler scale="0.5 0.5 0.5" rotation="0 0 0">
-              {/* Modelo 3D Real (Si tienes el archivo cell.glb en public) */}
-              <a-gltf-model src="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb" position="0 0 0" rotation="0 0 0"></a-gltf-model>
+           <a-entity scale="1 1 1" rotation="0 0 0">
+              {/* Si descargas un GLB y lo llamas procariota.glb en public, usa esta linea: */}
+              {/* <a-gltf-model src="/procariota.glb"></a-gltf-model> */}
               
-              <a-text value="MODELO 3D CARGADO" color="#FFFF00" position="0 -1 0" align="center"></a-text>
+              <a-sphere radius="0.4" color="yellow" wireframe="true"></a-sphere>
+              <a-text value="SISTEMA: PROCARIOTA" color="yellow" position="0 -0.8 0" align="center"></a-text>
            </a-entity>
         </a-entity>
 
         {/* --- CÉLULA EUCARIOTA --- */}
         <a-entity mindar-image-target="targetIndex: 1">
-           <a-entity gesture-handler scale="0.5 0.5 0.5" rotation="0 0 0">
-              {/* Modelo de ejemplo (Casco Táctico) para probar que el 3D real funciona */}
-              <a-gltf-model src="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb" position="0 0 0"></a-gltf-model>
+           <a-entity scale="1 1 1" rotation="0 0 0">
+              {/* Si descargas un GLB y lo llamas eucariota.glb en public, usa esta linea: */}
+              {/* <a-gltf-model src="/eucariota.glb"></a-gltf-model> */}
               
-              <a-text value="PROTOCOLO EUCARIOTA" color="#FFFF00" position="0 -1 0" align="center"></a-text>
+              <a-sphere radius="0.4" color="yellow">
+                 <a-sphere radius="0.45" color="yellow" wireframe="true" opacity="0.3"></a-sphere>
+              </a-sphere>
+              <a-text value="SISTEMA: EUCARIOTA" color="yellow" position="0 -0.8 0" align="center"></a-text>
            </a-entity>
         </a-entity>
       </a-scene>
 
       <style jsx global>{`
         video { z-index: 0 !important; }
-        .back-btn { position: absolute; top: 20px; left: 20px; z-index: 100; background: yellow; color: black; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; }
+        .back-btn { position: absolute; top: 20px; left: 20px; z-index: 100; background: yellow; color: black; border: none; padding: 10px 20px; font-weight: bold; }
       `}</style>
     </div>
   );
