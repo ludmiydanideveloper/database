@@ -54,6 +54,17 @@ const ARScanner = () => {
     );
   }
 
+  // Añadimos el script de gestos dinámicamente
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = "https://raw.githack.com/fcor/aframe-gesture-detector-component/master/dist/aframe-gesture-detector.min.js";
+    document.head.appendChild(script);
+    
+    const script2 = document.createElement('script');
+    script2.src = "https://raw.githack.com/fcor/aframe-gesture-detector-component/master/dist/gesture-handler.js";
+    document.head.appendChild(script2);
+  }, []);
+
   return (
     <div className="scanner-container" style={{ background: 'transparent' }}>
       {/* Botón de volver */}
@@ -72,7 +83,7 @@ const ARScanner = () => {
           <div className="scanner-status">SISTEMA: RASTREANDO...</div>
           <div style={{ fontSize: '0.6rem', color: 'var(--highlight-yellow)', opacity: 0.8 }}>
             [ DIAGNÓSTICO: {arReady ? 'SISTEMA CARGADO' : 'INICIALIZANDO...'} ]<br/>
-            [ CÁMARA: BUSCANDO STREAM... ]
+            [ GESTOS: ACTIVADOS (Pinch/Rotate) ]
           </div>
         </div>
       </div>
@@ -84,35 +95,67 @@ const ARScanner = () => {
         renderer="colorManagement: true, physicallyCorrectLights"
         xr-mode-ui="enabled: false"
         device-orientation-permission-ui="enabled: false"
+        gesture-detector
         style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 5 }}
       >
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-        {/* Target 1: Prokaryota */}
+        {/* Target 1: Prokaryota (Estructura más compleja) */}
         <a-entity mindar-image-target="targetIndex: 0">
-          <a-sphere 
-            position="0 0 0" 
-            radius="0.4" 
-            color="#FFFF00" 
-            wireframe="true" 
-            animation="property: rotation; to: 0 360 360; dur: 5000; easing: linear; loop: true"
-          ></a-sphere>
-          <a-text value="PROCARIOTA DETECTADA" position="0 -0.7 0" align="center" color="#FFFF00" width="2.5"></a-text>
+          <a-entity 
+            gesture-handler
+            rotation="0 0 0"
+          >
+             {/* Membrana externa */}
+             <a-sphere radius="0.4" color="#FFFF00" wireframe="true" opacity="0.3"></a-sphere>
+             {/* Núcleo / ADN */}
+             <a-torus-knot radius="0.15" radius-tubular="0.01" color="#FFFF00" animation="property: rotation; to: 360 360 0; dur: 3000; easing: linear; loop: true"></a-torus-knot>
+             
+             {/* Etiquetas Flotantes */}
+             <a-entity position="0.6 0.3 0">
+                <a-plane width="0.4" height="0.1" color="#000" opacity="0.8"></a-plane>
+                <a-text value="DNA_CORE" color="#FFFF00" width="1.5" align="center"></a-text>
+             </a-entity>
+             <a-entity position="0.6 -0.3 0">
+                <a-plane width="0.4" height="0.1" color="#000" opacity="0.8"></a-plane>
+                <a-text value="CAPSULE_V1" color="#FFFF00" width="1.5" align="center"></a-text>
+             </a-entity>
+
+             <a-text value="PROCARIOTA" position="0 -0.8 0" align="center" color="#FFFF00" width="3"></a-text>
+          </a-entity>
         </a-entity>
 
-        {/* Target 2: Eukaryota */}
+        {/* Target 2: Eukaryotic (Estructura con núcleo definido) */}
         <a-entity mindar-image-target="targetIndex: 1">
-          <a-box 
-            position="0 0 0" 
-            scale="0.5 0.5 0.5" 
-            color="#FFFF00" 
-            wireframe="true" 
-            animation="property: rotation; to: 360 360 0; dur: 5000; easing: linear; loop: true"
-          ></a-box>
-          <a-text value="EUCARIOTA DETECTADA" position="0 -0.7 0" align="center" color="#FFFF00" width="2.5"></a-text>
-        </a-entity>
+          <a-entity 
+            gesture-handler
+            rotation="0 0 0"
+          >
+             {/* Citoplasma */}
+             <a-sphere radius="0.45" color="#FFFF00" wireframe="true" opacity="0.1"></a-sphere>
+             {/* Núcleo Central */}
+             <a-sphere radius="0.15" color="#FFFF00" position="0 0 0">
+                <a-sphere radius="0.16" color="#000" wireframe="true" opacity="0.5"></a-sphere>
+             </a-sphere>
+             {/* Organelas (Mitocondrias simuladas) */}
+             <a-cylinder radius="0.05" height="0.15" position="0.25 0.1 0" rotation="45 45 0" color="#FFFF00" wireframe="true"></a-cylinder>
+             <a-cylinder radius="0.05" height="0.15" position="-0.2 -0.2 0" rotation="10 0 45" color="#FFFF00" wireframe="true"></a-cylinder>
 
+             {/* Etiquetas Flotantes */}
+             <a-entity position="0.6 0.4 0">
+                <a-plane width="0.5" height="0.12" color="#000" opacity="0.8"></a-plane>
+                <a-text value="NUCLEUS_ACTIVE" color="#FFFF00" width="1.8" align="center"></a-text>
+             </a-entity>
+             <a-entity position="-0.7 -0.3 0">
+                <a-plane width="0.6" height="0.12" color="#000" opacity="0.8"></a-plane>
+                <a-text value="ENERGY_PLANT_01" color="#FFFF00" width="1.8" align="center"></a-text>
+             </a-entity>
+
+             <a-text value="EUCARIOTA" position="0 -0.9 0" align="center" color="#FFFF00" width="3"></a-text>
+          </a-entity>
+        </a-entity>
       </a-scene>
+
 
       <style jsx global>{`
         /* FORZAR TRANSPARENCIA TOTAL EN LA PÁGINA */
