@@ -56,7 +56,7 @@ const ARScanner = () => {
 
   return (
     <div className="scanner-container" style={{ background: 'transparent' }}>
-      {/* Botón de volver con mayor prioridad visual */}
+      {/* Botón de volver */}
       <button 
         className="back-btn" 
         onClick={() => window.location.href = '/'}
@@ -65,15 +65,14 @@ const ARScanner = () => {
         &lt; ABORTAR MISIÓN
       </button>
 
-      {/* HUD Overlay - Ahora con pointer-events: none para no bloquear el toque en la cámara */}
+      {/* HUD Overlay */}
       <div className="scanner-hud" style={{ zIndex: 50, pointerEvents: 'none' }}>
         <div className="scanner-reticle"></div>
         <div className="scanner-info-panel" style={{ pointerEvents: 'auto' }}>
-          <div className="scanner-status">SISTEMA: RASTREANDO BIO-MARCADORES...</div>
-          <div style={{ fontSize: '0.6rem', color: 'var(--text-dim)' }}>
-            OBJECTIVOS: [CELL_001, CELL_002]<br/>
-            SENSORS: ACTIVE<br/>
-            GRID: STABLE
+          <div className="scanner-status">SISTEMA: RASTREANDO...</div>
+          <div style={{ fontSize: '0.6rem', color: 'var(--highlight-yellow)', opacity: 0.8 }}>
+            [ DIAGNÓSTICO: {arReady ? 'SISTEMA CARGADO' : 'INICIALIZANDO...'} ]<br/>
+            [ CÁMARA: BUSCANDO STREAM... ]
           </div>
         </div>
       </div>
@@ -85,17 +84,15 @@ const ARScanner = () => {
         renderer="colorManagement: true, physicallyCorrectLights"
         xr-mode-ui="enabled: false"
         device-orientation-permission-ui="enabled: false"
-        style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 1 }}
+        style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 5 }}
       >
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-        {/* Target 1: Prokaryotic */}
         <a-entity mindar-image-target="targetIndex: 0">
           <a-sphere position="0 0 0" radius="0.3" color="#FFFF00" wireframe="true" animation="property: rotation; to: 0 360 360; dur: 5000; easing: linear; loop: true"></a-sphere>
           <a-text value="PROCARIOTA" position="0 -0.6 0" align="center" color="#FFFF00" width="2"></a-text>
         </a-entity>
 
-        {/* Target 2: Eukaryotic */}
         <a-entity mindar-image-target="targetIndex: 1">
           <a-box position="0 0 0" scale="0.4 0.4 0.4" color="#FFFF00" wireframe="true" animation="property: rotation; to: 360 360 0; dur: 5000; easing: linear; loop: true"></a-box>
           <a-text value="EUCARIOTA" position="0 -0.6 0" align="center" color="#FFFF00" width="2"></a-text>
@@ -103,9 +100,18 @@ const ARScanner = () => {
       </a-scene>
 
       <style jsx global>{`
-        .mindar-ui-scanning, .mindar-ui-loading {
-          z-index: 60 !important;
+        /* FORZAR TRANSPARENCIA TOTAL EN LA PÁGINA */
+        html, body {
+          background: transparent !important;
+          background-image: none !important;
+          background-color: transparent !important;
         }
+        
+        .mindar-ui-scanning, .mindar-ui-loading {
+          z-index: 110 !important;
+        }
+        
+        /* El video debe estar por encima de todo pero debajo del HUD */
         video {
           position: fixed !important;
           top: 0 !important;
@@ -113,11 +119,13 @@ const ARScanner = () => {
           width: 100vw !important;
           height: 100vh !important;
           object-fit: cover !important;
-          z-index: -1 !important;
+          z-index: 0 !important;
+          display: block !important;
         }
       `}</style>
     </div>
   );
+
 
 };
 
