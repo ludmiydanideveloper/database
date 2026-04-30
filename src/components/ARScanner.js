@@ -55,16 +55,20 @@ const ARScanner = () => {
   }
 
   return (
-    <div className="scanner-container">
-      {/* Back Button */}
-      <button className="back-btn" onClick={() => window.location.href = '/'}>
+    <div className="scanner-container" style={{ background: 'transparent' }}>
+      {/* Botón de volver con mayor prioridad visual */}
+      <button 
+        className="back-btn" 
+        onClick={() => window.location.href = '/'}
+        style={{ pointerEvents: 'auto', zIndex: 100 }}
+      >
         &lt; ABORTAR MISIÓN
       </button>
 
-      {/* HUD Overlay */}
-      <div className="scanner-hud">
+      {/* HUD Overlay - Ahora con pointer-events: none para no bloquear el toque en la cámara */}
+      <div className="scanner-hud" style={{ zIndex: 50, pointerEvents: 'none' }}>
         <div className="scanner-reticle"></div>
-        <div className="scanner-info-panel">
+        <div className="scanner-info-panel" style={{ pointerEvents: 'auto' }}>
           <div className="scanner-status">SISTEMA: RASTREANDO BIO-MARCADORES...</div>
           <div style={{ fontSize: '0.6rem', color: 'var(--text-dim)' }}>
             OBJECTIVOS: [CELL_001, CELL_002]<br/>
@@ -75,30 +79,46 @@ const ARScanner = () => {
       </div>
 
       <a-scene
-        mindar-image="imageTargetSrc: /targets.mind; autoStart: true; uiLoading: no; uiError: yes; uiScanning: no;"
+        mindar-image="imageTargetSrc: /targets.mind; autoStart: true; uiLoading: yes; uiError: yes; uiScanning: yes;"
         embedded
         color-space="sRGB"
         renderer="colorManagement: true, physicallyCorrectLights"
         xr-mode-ui="enabled: false"
         device-orientation-permission-ui="enabled: false"
-        style={{ width: '100%', height: '100%' }}
+        style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 1 }}
       >
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
         {/* Target 1: Prokaryotic */}
         <a-entity mindar-image-target="targetIndex: 0">
           <a-sphere position="0 0 0" radius="0.3" color="#FFFF00" wireframe="true" animation="property: rotation; to: 0 360 360; dur: 5000; easing: linear; loop: true"></a-sphere>
-          <a-text value="ANALIZANDO: PROCARIOTA" position="0 -0.6 0" align="center" color="#FFFF00" width="2"></a-text>
+          <a-text value="PROCARIOTA" position="0 -0.6 0" align="center" color="#FFFF00" width="2"></a-text>
         </a-entity>
 
         {/* Target 2: Eukaryotic */}
         <a-entity mindar-image-target="targetIndex: 1">
           <a-box position="0 0 0" scale="0.4 0.4 0.4" color="#FFFF00" wireframe="true" animation="property: rotation; to: 360 360 0; dur: 5000; easing: linear; loop: true"></a-box>
-          <a-text value="ANALIZANDO: EUCARIOTA" position="0 -0.6 0" align="center" color="#FFFF00" width="2"></a-text>
+          <a-text value="EUCARIOTA" position="0 -0.6 0" align="center" color="#FFFF00" width="2"></a-text>
         </a-entity>
       </a-scene>
+
+      <style jsx global>{`
+        .mindar-ui-scanning, .mindar-ui-loading {
+          z-index: 60 !important;
+        }
+        video {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          object-fit: cover !important;
+          z-index: -1 !important;
+        }
+      `}</style>
     </div>
   );
+
 };
 
 export default ARScanner;
