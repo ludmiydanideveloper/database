@@ -1,66 +1,95 @@
+"use client";
 import Image from "next/image";
-import styles from "./page.module.css";
+
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.js file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="hud-container">
+      <header className="hud-header">
+        <div>
+          <h1 className="hud-title">BIO-DATA SCANNER</h1>
+          <p style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginTop: '4px' }}>
+            ESTADO DEL SISTEMA: <span style={{ color: 'var(--highlight-yellow)' }}>ONLINE</span>
           </p>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="hud-version">v1.0.4 // AR_DATABASE</div>
+      </header>
+
+      <main className="bio-grid">
+        {/* Prokaryotic Cell */}
+        <div className="tactical-frame">
+          <div className="tactical-frame-inner">
+            <div className="image-container">
+              <Image 
+                src="/prokaryotic.png" 
+                alt="Célula Procariota" 
+                width={600} 
+                height={600} 
+                className="cell-image"
+                priority
+              />
+              <div className="image-overlay"></div>
+              <div className="scan-line"></div>
+            </div>
+            <div className="frame-info">
+              <span className="sample-name">CÉLULA PROCARIOTA</span>
+              <span className="sample-id">SCAN_ID_001</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Eukaryotic Cell */}
+        <div className="tactical-frame">
+          <div className="tactical-frame-inner">
+            <div className="image-container">
+              <Image 
+                src="/eukaryotic.png" 
+                alt="Célula Eucariota" 
+                width={600} 
+                height={600} 
+                className="cell-image"
+                priority
+              />
+              <div className="image-overlay"></div>
+              <div className="scan-line"></div>
+            </div>
+            <div className="frame-info">
+              <span className="sample-name">CÉLULA EUCARIOTA</span>
+              <span className="sample-id">SCAN_ID_002</span>
+            </div>
+          </div>
         </div>
       </main>
+
+      <footer className="hud-footer">
+        <div className="instruction-box">
+          <p className="instruction-text">
+            &gt; Apunta tu Visor Táctico a estas bio-muestras para el análisis 3D
+          </p>
+          <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '1rem' }}>
+            <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>[ LINKED ]</span>
+            <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>[ SYNC_READY ]</span>
+            <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>[ ENCRYPTED ]</span>
+          </div>
+        </div>
+
+        <button 
+          className="launch-scanner-btn"
+          onClick={() => window.location.href = '/scanner'}
+        >
+          INICIAR ESCÁNER TÁCTICO
+        </button>
+      </footer>
+
+
+      {/* Decorative HUD Elements */}
+      <div style={{ position: 'fixed', bottom: '20px', left: '20px', fontSize: '0.6rem', color: 'var(--text-dim)' }}>
+        0x45 0x55 0x4B 0x41 0x52 0x59 0x4F 0x54 0x45
+      </div>
+      <div style={{ position: 'fixed', bottom: '20px', right: '20px', fontSize: '0.6rem', color: 'var(--text-dim)' }}>
+        LATENCY: 0.02ms // SIGNAL: STABLE
+      </div>
     </div>
   );
 }
+
