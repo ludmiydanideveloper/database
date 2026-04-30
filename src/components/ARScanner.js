@@ -88,15 +88,30 @@ const ARScanner = () => {
       >
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
+        {/* Target 1: Prokaryota */}
         <a-entity mindar-image-target="targetIndex: 0">
-          <a-sphere position="0 0 0" radius="0.3" color="#FFFF00" wireframe="true" animation="property: rotation; to: 0 360 360; dur: 5000; easing: linear; loop: true"></a-sphere>
-          <a-text value="PROCARIOTA" position="0 -0.6 0" align="center" color="#FFFF00" width="2"></a-text>
+          <a-sphere 
+            position="0 0 0" 
+            radius="0.4" 
+            color="#FFFF00" 
+            wireframe="true" 
+            animation="property: rotation; to: 0 360 360; dur: 5000; easing: linear; loop: true"
+          ></a-sphere>
+          <a-text value="PROCARIOTA DETECTADA" position="0 -0.7 0" align="center" color="#FFFF00" width="2.5"></a-text>
         </a-entity>
 
+        {/* Target 2: Eukaryota */}
         <a-entity mindar-image-target="targetIndex: 1">
-          <a-box position="0 0 0" scale="0.4 0.4 0.4" color="#FFFF00" wireframe="true" animation="property: rotation; to: 360 360 0; dur: 5000; easing: linear; loop: true"></a-box>
-          <a-text value="EUCARIOTA" position="0 -0.6 0" align="center" color="#FFFF00" width="2"></a-text>
+          <a-box 
+            position="0 0 0" 
+            scale="0.5 0.5 0.5" 
+            color="#FFFF00" 
+            wireframe="true" 
+            animation="property: rotation; to: 360 360 0; dur: 5000; easing: linear; loop: true"
+          ></a-box>
+          <a-text value="EUCARIOTA DETECTADA" position="0 -0.7 0" align="center" color="#FFFF00" width="2.5"></a-text>
         </a-entity>
+
       </a-scene>
 
       <style jsx global>{`
