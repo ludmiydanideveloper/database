@@ -100,6 +100,7 @@ const ARScanner = () => {
         <a-assets timeout="30000">
           <a-asset-item id="eucariotaModel" src="/eucariota/scene.gltf"></a-asset-item>
           <a-asset-item id="procariotaModel" src="/eve3d_-_celula_procariota.glb"></a-asset-item>
+          <img id="vegetalImg" src="/vegetal.png" crossOrigin="anonymous" />
         </a-assets>
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -125,6 +126,18 @@ const ARScanner = () => {
               <a-gltf-model src="#eucariotaModel" scale="0.7 0.7 0.7" rotation="-90 0 0"></a-gltf-model>
            </a-entity>
            <a-text value="EUKARYOTA 3D" color="#00FFFF" position="0 -0.3 0" align="center" width="2"></a-text>
+        </a-entity>
+
+        {/* --- CÉLULA VEGETAL (Holograma) --- */}
+        <a-entity mindar-image-target="targetIndex: 2">
+           <a-entity position="0 0.4 0" touch-gestures
+              animation="property: position; to: 0 0.55 0; dur: 2000; dir: alternate; easing: easeInOutSine; loop: true"
+              animation__rotate="property: rotation; to: 0 360 0; dur: 9000; easing: linear; loop: true">
+              <a-image src="#vegetalImg" width="0.9" height="0.9" opacity="0.95"></a-image>
+              <a-ring radius-inner="0.48" radius-outer="0.5" color="#00FF88" opacity="0.6" rotation="90 0 0"
+                 animation="property: scale; to: 1.1 1.1 1.1; dur: 1500; dir: alternate; easing: easeInOutSine; loop: true"></a-ring>
+           </a-entity>
+           <a-text value="VEGETAL CELL 3D" color="#00FF88" position="0 -0.3 0" align="center" width="2"></a-text>
         </a-entity>
       </a-scene>
 
