@@ -18,14 +18,17 @@ const ARScanner = () => {
     };
 
     const loadAll = async () => {
-      await loadScript('https://aframe.io/releases/1.4.2/aframe.min.js');
+      // Usamos 1.4.1, la más compatible para GLTF en móviles
+      await loadScript('https://aframe.io/releases/1.4.1/aframe.min.js');
       await loadScript('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js');
       setScriptsLoaded(true);
     };
     loadAll();
   }, []);
 
-  if (!mounted || !scriptsLoaded) return <div className="bg-black h-screen flex items-center justify-center text-yellow-400">ACTIVANDO NÚCLEOS BIÓTICOS...</div>;
+  if (!mounted || !scriptsLoaded) return <div className="bg-black h-screen flex items-center justify-center text-cyan-400 font-mono text-center px-4">
+    PREPARANDO VISOR BIOLÓGICO REALISTA...<br/><span className="text-[10px] opacity-50">Si se traba, usa Chrome o Safari directamente.</span>
+  </div>;
 
   return (
     <div className="scanner-container">
@@ -33,66 +36,46 @@ const ARScanner = () => {
 
       <a-scene
         mindar-image="imageTargetSrc: /targets.mind; autoStart: true; uiLoading: no;"
-        embedded color-space="sRGB" renderer="colorManagement: true, antialias: true"
+        embedded color-space="sRGB" 
+        renderer="colorManagement: true; antialias: true; physicallyCorrectLights: true"
         xr-mode-ui="enabled: false"
+        gltf-model="dracoDecoderPath: https://www.gstatic.com/draco/versioned/decoders/1.5.6/;"
         style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 5 }}
       >
+        <a-assets>
+           <a-asset-item id="cellModel" src="/cell.glb"></a-asset-item>
+           <a-asset-item id="prokaryoteModel" src="/prokaryote.glb"></a-asset-item>
+        </a-assets>
+
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-        <a-light type="ambient" intensity="1"></a-light>
-        <a-light type="point" position="2 4 4" intensity="2" color="#FFFF00"></a-light>
+        <a-light type="ambient" intensity="1.5"></a-light>
+        <a-light type="directional" position="1 2 1" intensity="1"></a-light>
 
-        {/* --- CÉLULA PROCARIOTA TÁCTICA --- */}
+        {/* --- CÉLULA PROCARIOTA REAL --- */}
         <a-entity mindar-image-target="targetIndex: 0">
-           <a-entity scale="0.8 0.8 0.8" animation="property: rotation; to: 0 360 0; dur: 8000; easing: linear; loop: true">
-              {/* Cuerpo: Cápsula de cristal */}
-              <a-cylinder radius="0.25" height="0.6" color="#FFFF00" opacity="0.1" transparent="true">
-                 <a-sphere position="0 0.3 0" radius="0.25" color="#FFFF00" opacity="0.1" transparent="true"></a-sphere>
-                 <a-sphere position="0 -0.3 0" radius="0.25" color="#FFFF00" opacity="0.1" transparent="true"></a-sphere>
-                 <a-cylinder radius="0.26" height="0.6" wireframe="true" color="#FFFF00" opacity="0.3"></a-cylinder>
-              </a-cylinder>
-              
-              {/* ADN: El núcleo de energía */}
-              <a-torus-knot radius="0.12" radius-tubular="0.005" p="2" q="9" color="#FFFF00"
-                 animation="property: scale; to: 1.1 1.1 1.1; dur: 400; dir: alternate; loop: true"></a-torus-knot>
-
-              {/* Flagelo Táctico */}
-              <a-entity position="0 -0.5 0">
-                 <a-cylinder radius="0.005" height="0.4" color="#FFFF00" rotation="10 0 0" 
-                    animation="property: rotation; to: -10 0 20; dur: 300; dir: alternate; loop: true"></a-cylinder>
-              </a-entity>
-
-              <a-text value="ANALYSIS: PROKARYOTA" color="#FFFF00" position="0 -1 0" align="center" width="2"></a-text>
+           <a-entity scale="1 1 1" rotation="0 0 0" animation="property: rotation; to: 0 360 0; dur: 10000; easing: linear; loop: true">
+              <a-gltf-model src="#prokaryoteModel" crossorigin="anonymous"></a-gltf-model>
+              <a-text value="PROKARYOTA ANALYSIS" color="#A0FF00" position="0 -1 0" align="center" width="2.5"></a-text>
            </a-entity>
         </a-entity>
 
-        {/* --- CÉLULA EUCARIOTA TÁCTICA --- */}
+        {/* --- CÉLULA EUCARIOTA REAL --- */}
         <a-entity mindar-image-target="targetIndex: 1">
-           <a-entity scale="1 1 1" animation="property: rotation; to: 360 360 0; dur: 15000; easing: linear; loop: true">
-              {/* Membrana: Doble Capa de Rejilla */}
-              <a-sphere radius="0.4" color="#00FFFF" opacity="0.1" transparent="true">
-                 <a-sphere radius="0.42" color="#00FFFF" wireframe="true" opacity="0.2"></a-sphere>
-              </a-sphere>
-
-              {/* Núcleo: Sol Central */}
-              <a-sphere radius="0.12" color="#FFFF00">
-                 <a-torus radius="0.18" radius-tubular="0.005" color="#FFFF00" 
-                    animation="property: rotation; to: 360 0 360; dur: 2000; easing: linear; loop: true"></a-torus>
-              </a-sphere>
-
-              {/* Organelas: Cristales de Energía */}
-              <a-octahedron radius="0.05" position="0.2 0.2 0.1" color="#00FFFF" wireframe="true"></a-octahedron>
-              <a-octahedron radius="0.05" position="-0.2 -0.1 -0.1" color="#00FFFF" wireframe="true"></a-octahedron>
-              <a-octahedron radius="0.05" position="0.1 -0.2 0.2" color="#00FFFF" wireframe="true"></a-octahedron>
-
-              <a-text value="ANALYSIS: EUKARYOTA" color="#00FFFF" position="0 -0.8 0" align="center" width="2"></a-text>
+           <a-entity scale="1 1 1" rotation="0 0 0" animation="property: rotation; to: 0 360 0; dur: 12000; easing: linear; loop: true">
+              <a-gltf-model src="#cellModel" crossorigin="anonymous"></a-gltf-model>
+              <a-text value="EUKARYOTA ANALYSIS" color="#00FFFF" position="0 -1 0" align="center" width="2.5"></a-text>
            </a-entity>
         </a-entity>
       </a-scene>
 
       <style jsx global>{`
         video { z-index: 0 !important; }
-        .back-btn { position: fixed; top: 20px; left: 20px; z-index: 100; background: #FFFF00; color: black; border: none; padding: 10px 20px; font-family: monospace; font-weight: bold; }
+        .back-btn { 
+          position: fixed; top: 20px; left: 20px; z-index: 100; 
+          background: rgba(0,0,0,0.8); color: #00FFFF; border: 1px solid #00FFFF;
+          padding: 8px 16px; font-family: monospace; font-size: 12px;
+        }
       `}</style>
     </div>
   );
