@@ -20,14 +20,71 @@ const ARScanner = () => {
     const loadAll = async () => {
       await loadScript('https://aframe.io/releases/1.4.2/aframe.min.js');
       await loadScript('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js');
+      
+      // Registrar componente de gestos táctiles directamente
+      if (window.AFRAME && !window.AFRAME.components['touch-gestures']) {
+        window.AFRAME.registerComponent('touch-gestures', {
+          init: function () {
+            this.initialScale = this.el.object3D.scale.clone();
+            this.scaleFactor = 1;
+            this.initialDistance = 0;
+            this.initialRotation = 0;
+            this.currentRotationY = 0;
+
+            // Pinch para escalar
+            this.el.sceneEl.addEventListener('touchstart', (e) => {
+              if (e.touches.length === 2) {
+                this.initialDistance = this.getDistance(e.touches);
+              }
+            });
+
+            this.el.sceneEl.addEventListener('touchmove', (e) => {
+              if (e.touches.length === 2) {
+                e.preventDefault();
+                const currentDistance = this.getDistance(e.touches);
+                if (this.initialDistance > 0) {
+                  const delta = currentDistance / this.initialDistance;
+                  this.scaleFactor = Math.min(Math.max(delta, 0.3), 5);
+                  this.el.object3D.scale.set(
+                    this.initialScale.x * this.scaleFactor,
+                    this.initialScale.y * this.scaleFactor,
+                    this.initialScale.z * this.scaleFactor
+                  );
+                }
+              } else if (e.touches.length === 1) {
+                // Un dedo para rotar
+                const touch = e.touches[0];
+                if (this.lastTouchX !== undefined) {
+                  const deltaX = touch.clientX - this.lastTouchX;
+                  this.currentRotationY += deltaX * 0.5;
+                  this.el.object3D.rotation.y = THREE.MathUtils.degToRad(this.currentRotationY);
+                }
+                this.lastTouchX = touch.clientX;
+              }
+            });
+
+            this.el.sceneEl.addEventListener('touchend', () => {
+              this.initialDistance = 0;
+              this.initialScale = this.el.object3D.scale.clone();
+              this.lastTouchX = undefined;
+            });
+          },
+          getDistance: function (touches) {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+          }
+        });
+      }
+      
       setScriptsLoaded(true);
     };
     loadAll();
   }, []);
 
   if (!mounted || !scriptsLoaded) return <div className="bg-black h-screen flex items-center justify-center text-cyan-400 font-mono text-center px-4">
-    CARGANDO MODELOS BIOLÓGICOS 3D...<br/>
-    <span className="text-[10px] opacity-50 block mt-2">Los modelos pueden tardar unos segundos la primera vez</span>
+    CARGANDO MODELOS 3D...<br/>
+    <span className="text-[10px] opacity-50 block mt-2">Gestos: 1 dedo = rotar | 2 dedos = agrandar/achicar</span>
   </div>;
 
   return (
@@ -53,9 +110,8 @@ const ARScanner = () => {
         {/* --- CÉLULA PROCARIOTA 3D REAL --- */}
         <a-entity mindar-image-target="targetIndex: 0">
            <a-entity position="0 0.3 0" 
-              animation="property: position; to: 0 0.45 0; dur: 2000; dir: alternate; easing: easeInOutSine; loop: true"
-              animation__rotate="property: rotation; to: 0 360 0; dur: 8000; easing: linear; loop: true">
-              <a-gltf-model src="#procariotaModel" scale="0.005 0.005 0.005"></a-gltf-model>
+              animation="property: position; to: 0 0.45 0; dur: 2000; dir: alternate; easing: easeInOutSine; loop: true">
+              <a-gltf-model src="#procariotaModel" scale="0.05 0.05 0.05" touch-gestures></a-gltf-model>
            </a-entity>
            <a-text value="PROKARYOTA 3D" color="#A0FF00" position="0 -0.3 0" align="center" width="2"></a-text>
         </a-entity>
@@ -63,9 +119,8 @@ const ARScanner = () => {
         {/* --- CÉLULA EUCARIOTA 3D REAL --- */}
         <a-entity mindar-image-target="targetIndex: 1">
            <a-entity position="0 0.3 0" 
-              animation="property: position; to: 0 0.45 0; dur: 2500; dir: alternate; easing: easeInOutSine; loop: true"
-              animation__rotate="property: rotation; to: 0 360 0; dur: 10000; easing: linear; loop: true">
-              <a-gltf-model src="#eucariotaModel" scale="3 3 3"></a-gltf-model>
+              animation="property: position; to: 0 0.45 0; dur: 2500; dir: alternate; easing: easeInOutSine; loop: true">
+              <a-gltf-model src="#eucariotaModel" scale="30 30 30" touch-gestures></a-gltf-model>
            </a-entity>
            <a-text value="EUKARYOTA 3D" color="#00FFFF" position="0 -0.3 0" align="center" width="2"></a-text>
         </a-entity>
