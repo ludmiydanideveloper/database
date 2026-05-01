@@ -45,40 +45,48 @@ const ARScanner = () => {
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
         <a-light type="ambient" intensity="1.5"></a-light>
 
-        {/* --- CÉLULA PROCARIOTA (Holograma flotante) --- */}
+        {/* --- CÉLULA PROCARIOTA --- */}
         <a-entity mindar-image-target="targetIndex: 0">
-           <a-entity position="0 0.2 0">
-              {/* Imagen holográfica de la célula */}
-              <a-image src="#prokaryoticImg" width="1" height="1" 
-                 animation="property: position; to: 0 0.05 0; dur: 2000; dir: alternate; easing: easeInOutSine; loop: true"
-                 opacity="0.95">
-              </a-image>
+           {/* Sombra en el "piso" para dar profundidad */}
+           <a-ring radius-inner="0" radius-outer="0.35" color="#000000" opacity="0.4" rotation="0 0 0" position="0 0 0"></a-ring>
+
+           {/* Célula flotante */}
+           <a-entity position="0 0.6 -0.3" 
+              animation="property: position; to: 0 0.75 -0.3; dur: 2000; dir: alternate; easing: easeInOutSine; loop: true"
+              animation__rotate="property: rotation; to: 0 360 0; dur: 6000; easing: linear; loop: true">
               
-              {/* Anillo de Escaneo */}
-              <a-ring radius-inner="0.55" radius-outer="0.57" color="#FFFF00" opacity="0.6" rotation="90 0 0" position="0 -0.05 0"
-                 animation="property: rotation; to: 90 360 0; dur: 3000; easing: linear; loop: true"></a-ring>
+              <a-image src="#prokaryoticImg" width="0.9" height="0.9" opacity="0.95"
+                 rotation="0 0 0"></a-image>
               
-              {/* Etiqueta inferior */}
-              <a-text value="STATUS: PROKARYOTA DETECTED" color="#FFFF00" position="0 -0.7 0" align="center" width="2"></a-text>
+              {/* Anillo de Escaneo giratorio */}
+              <a-ring radius-inner="0.48" radius-outer="0.5" color="#FFFF00" opacity="0.7" rotation="90 0 0" position="0 0 0"
+                 animation="property: scale; to: 1.1 1.1 1.1; dur: 1500; dir: alternate; easing: easeInOutSine; loop: true"></a-ring>
            </a-entity>
+
+           {/* Etiqueta flotante debajo */}
+           <a-text value="PROKARYOTA DETECTED" color="#FFFF00" position="0 -0.1 0" align="center" width="2"></a-text>
         </a-entity>
 
-        {/* --- CÉLULA EUCARIOTA (Holograma flotante) --- */}
+        {/* --- CÉLULA EUCARIOTA --- */}
         <a-entity mindar-image-target="targetIndex: 1">
-           <a-entity position="0 0.2 0">
-              {/* Imagen holográfica de la célula */}
-              <a-image src="#eukaryoticImg" width="1" height="1" 
-                 animation="property: position; to: 0 0.05 0; dur: 2000; dir: alternate; easing: easeInOutSine; loop: true"
-                 opacity="0.95">
-              </a-image>
+           {/* Sombra en el "piso" */}
+           <a-ring radius-inner="0" radius-outer="0.35" color="#000000" opacity="0.4" rotation="0 0 0" position="0 0 0"></a-ring>
+
+           {/* Célula flotante */}
+           <a-entity position="0 0.6 -0.3" 
+              animation="property: position; to: 0 0.75 -0.3; dur: 2500; dir: alternate; easing: easeInOutSine; loop: true"
+              animation__rotate="property: rotation; to: 0 360 0; dur: 8000; easing: linear; loop: true">
               
-              {/* Anillo de Escaneo */}
-              <a-ring radius-inner="0.55" radius-outer="0.57" color="#00FFFF" opacity="0.6" rotation="90 0 0" position="0 -0.05 0"
-                 animation="property: rotation; to: 90 360 0; dur: 3000; easing: linear; loop: true"></a-ring>
+              <a-image src="#eukaryoticImg" width="0.9" height="0.9" opacity="0.95"
+                 rotation="0 0 0"></a-image>
               
-              {/* Etiqueta inferior */}
-              <a-text value="STATUS: EUKARYOTA DETECTED" color="#00FFFF" position="0 -0.7 0" align="center" width="2"></a-text>
+              {/* Anillo de Escaneo giratorio */}
+              <a-ring radius-inner="0.48" radius-outer="0.5" color="#00FFFF" opacity="0.7" rotation="90 0 0" position="0 0 0"
+                 animation="property: scale; to: 1.1 1.1 1.1; dur: 1500; dir: alternate; easing: easeInOutSine; loop: true"></a-ring>
            </a-entity>
+
+           {/* Etiqueta flotante debajo */}
+           <a-text value="EUKARYOTA DETECTED" color="#00FFFF" position="0 -0.1 0" align="center" width="2"></a-text>
         </a-entity>
       </a-scene>
 
