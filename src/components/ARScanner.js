@@ -110,7 +110,8 @@ const ARScanner = () => {
         {/* --- CÉLULA PROCARIOTA 3D REAL --- */}
         <a-entity mindar-image-target="targetIndex: 0">
            <a-entity position="0 0.3 0" touch-gestures
-              animation="property: position; to: 0 0.45 0; dur: 2000; dir: alternate; easing: easeInOutSine; loop: true">
+              animation="property: position; to: 0 0.45 0; dur: 2000; dir: alternate; easing: easeInOutSine; loop: true"
+              animation__rotate="property: rotation; to: 0 360 0; dur: 8000; easing: linear; loop: true">
               <a-gltf-model src="#procariotaModel" scale="0.05 0.05 0.05" rotation="-90 0 0"></a-gltf-model>
            </a-entity>
            <a-text value="PROKARYOTA 3D" color="#A0FF00" position="0 -0.3 0" align="center" width="2"></a-text>
@@ -119,7 +120,8 @@ const ARScanner = () => {
         {/* --- CÉLULA EUCARIOTA 3D REAL --- */}
         <a-entity mindar-image-target="targetIndex: 1">
            <a-entity position="0 0.3 0" touch-gestures
-              animation="property: position; to: 0 0.45 0; dur: 2500; dir: alternate; easing: easeInOutSine; loop: true">
+              animation="property: position; to: 0 0.45 0; dur: 2500; dir: alternate; easing: easeInOutSine; loop: true"
+              animation__rotate="property: rotation; to: 0 360 0; dur: 10000; easing: linear; loop: true">
               <a-gltf-model src="#eucariotaModel" scale="0.7 0.7 0.7" rotation="-90 0 0"></a-gltf-model>
            </a-entity>
            <a-text value="EUKARYOTA 3D" color="#00FFFF" position="0 -0.3 0" align="center" width="2"></a-text>
