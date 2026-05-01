@@ -98,7 +98,7 @@ const ARScanner = () => {
         style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 5 }}
       >
         <a-assets timeout="30000">
-          <a-asset-item id="eucariotaModel" src="/cellula_animale.glb"></a-asset-item>
+          <a-asset-item id="eucariotaModel" src="/eucariota/scene.gltf"></a-asset-item>
           <a-asset-item id="procariotaModel" src="/eve3d_-_celula_procariota.glb"></a-asset-item>
         </a-assets>
 
@@ -120,7 +120,7 @@ const ARScanner = () => {
         <a-entity mindar-image-target="targetIndex: 1">
            <a-entity position="0 0.3 0" 
               animation="property: position; to: 0 0.45 0; dur: 2500; dir: alternate; easing: easeInOutSine; loop: true">
-              <a-gltf-model src="#eucariotaModel" scale="30 30 30" touch-gestures></a-gltf-model>
+              <a-gltf-model src="#eucariotaModel" scale="1 1 1" touch-gestures></a-gltf-model>
            </a-entity>
            <a-text value="EUKARYOTA 3D" color="#00FFFF" position="0 -0.3 0" align="center" width="2"></a-text>
         </a-entity>
