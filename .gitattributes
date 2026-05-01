@@ -1,0 +1,4 @@
+# Treat GLB files as binary (never convert line endings)
+*.glb binary
+*.gltf binary
+*.mind binary

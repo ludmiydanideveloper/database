@@ -25,7 +25,10 @@ const ARScanner = () => {
     loadAll();
   }, []);
 
-  if (!mounted || !scriptsLoaded) return <div className="bg-black h-screen flex items-center justify-center text-cyan-400 font-mono">PREPARANDO BIO-VISOR...</div>;
+  if (!mounted || !scriptsLoaded) return <div className="bg-black h-screen flex items-center justify-center text-cyan-400 font-mono text-center px-4">
+    CARGANDO MODELOS BIOLÓGICOS 3D...<br/>
+    <span className="text-[10px] opacity-50 block mt-2">Los modelos pueden tardar unos segundos la primera vez</span>
+  </div>;
 
   return (
     <div className="scanner-container">
@@ -37,56 +40,34 @@ const ARScanner = () => {
         xr-mode-ui="enabled: false"
         style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 5 }}
       >
-        <a-assets>
-          <img id="prokaryoticImg" src="/prokaryotic_3d.png" crossOrigin="anonymous" />
-          <img id="eukaryoticImg" src="/eukaryotic_3d.png" crossOrigin="anonymous" />
+        <a-assets timeout="30000">
+          <a-asset-item id="eucariotaModel" src="/cellula_animale.glb"></a-asset-item>
+          <a-asset-item id="procariotaModel" src="/eve3d_-_celula_procariota.glb"></a-asset-item>
         </a-assets>
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
         <a-light type="ambient" intensity="1.5"></a-light>
+        <a-light type="directional" position="1 2 3" intensity="1"></a-light>
 
-        {/* --- CÉLULA PROCARIOTA --- */}
+        {/* --- CÉLULA PROCARIOTA 3D REAL --- */}
         <a-entity mindar-image-target="targetIndex: 0">
-           {/* Sombra en el "piso" para dar profundidad */}
-           <a-ring radius-inner="0" radius-outer="0.35" color="#000000" opacity="0.4" rotation="0 0 0" position="0 0 0"></a-ring>
-
-           {/* Célula flotante */}
-           <a-entity position="0 0.6 -0.3" 
-              animation="property: position; to: 0 0.75 -0.3; dur: 2000; dir: alternate; easing: easeInOutSine; loop: true"
-              animation__rotate="property: rotation; to: 0 360 0; dur: 6000; easing: linear; loop: true">
-              
-              <a-image src="#prokaryoticImg" width="0.9" height="0.9" opacity="0.95"
-                 rotation="0 0 0"></a-image>
-              
-              {/* Anillo de Escaneo giratorio */}
-              <a-ring radius-inner="0.48" radius-outer="0.5" color="#FFFF00" opacity="0.7" rotation="90 0 0" position="0 0 0"
-                 animation="property: scale; to: 1.1 1.1 1.1; dur: 1500; dir: alternate; easing: easeInOutSine; loop: true"></a-ring>
+           <a-entity position="0 0.3 0" 
+              animation="property: position; to: 0 0.45 0; dur: 2000; dir: alternate; easing: easeInOutSine; loop: true"
+              animation__rotate="property: rotation; to: 0 360 0; dur: 8000; easing: linear; loop: true">
+              <a-gltf-model src="#procariotaModel" scale="0.3 0.3 0.3"></a-gltf-model>
            </a-entity>
-
-           {/* Etiqueta flotante debajo */}
-           <a-text value="PROKARYOTA DETECTED" color="#FFFF00" position="0 -0.1 0" align="center" width="2"></a-text>
+           <a-text value="PROKARYOTA 3D" color="#A0FF00" position="0 -0.3 0" align="center" width="2"></a-text>
         </a-entity>
 
-        {/* --- CÉLULA EUCARIOTA --- */}
+        {/* --- CÉLULA EUCARIOTA 3D REAL --- */}
         <a-entity mindar-image-target="targetIndex: 1">
-           {/* Sombra en el "piso" */}
-           <a-ring radius-inner="0" radius-outer="0.35" color="#000000" opacity="0.4" rotation="0 0 0" position="0 0 0"></a-ring>
-
-           {/* Célula flotante */}
-           <a-entity position="0 0.6 -0.3" 
-              animation="property: position; to: 0 0.75 -0.3; dur: 2500; dir: alternate; easing: easeInOutSine; loop: true"
-              animation__rotate="property: rotation; to: 0 360 0; dur: 8000; easing: linear; loop: true">
-              
-              <a-image src="#eukaryoticImg" width="0.9" height="0.9" opacity="0.95"
-                 rotation="0 0 0"></a-image>
-              
-              {/* Anillo de Escaneo giratorio */}
-              <a-ring radius-inner="0.48" radius-outer="0.5" color="#00FFFF" opacity="0.7" rotation="90 0 0" position="0 0 0"
-                 animation="property: scale; to: 1.1 1.1 1.1; dur: 1500; dir: alternate; easing: easeInOutSine; loop: true"></a-ring>
+           <a-entity position="0 0.3 0" 
+              animation="property: position; to: 0 0.45 0; dur: 2500; dir: alternate; easing: easeInOutSine; loop: true"
+              animation__rotate="property: rotation; to: 0 360 0; dur: 10000; easing: linear; loop: true">
+              <a-gltf-model src="#eucariotaModel" scale="0.3 0.3 0.3"></a-gltf-model>
            </a-entity>
-
-           {/* Etiqueta flotante debajo */}
-           <a-text value="EUKARYOTA DETECTED" color="#00FFFF" position="0 -0.1 0" align="center" width="2"></a-text>
+           <a-text value="EUKARYOTA 3D" color="#00FFFF" position="0 -0.3 0" align="center" width="2"></a-text>
         </a-entity>
       </a-scene>
 
