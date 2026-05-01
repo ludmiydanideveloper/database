@@ -55,7 +55,7 @@ const ARScanner = () => {
            <a-entity position="0 0.3 0" 
               animation="property: position; to: 0 0.45 0; dur: 2000; dir: alternate; easing: easeInOutSine; loop: true"
               animation__rotate="property: rotation; to: 0 360 0; dur: 8000; easing: linear; loop: true">
-              <a-gltf-model src="#procariotaModel" scale="0.3 0.3 0.3"></a-gltf-model>
+              <a-gltf-model src="#procariotaModel" scale="0.005 0.005 0.005"></a-gltf-model>
            </a-entity>
            <a-text value="PROKARYOTA 3D" color="#A0FF00" position="0 -0.3 0" align="center" width="2"></a-text>
         </a-entity>
@@ -65,7 +65,7 @@ const ARScanner = () => {
            <a-entity position="0 0.3 0" 
               animation="property: position; to: 0 0.45 0; dur: 2500; dir: alternate; easing: easeInOutSine; loop: true"
               animation__rotate="property: rotation; to: 0 360 0; dur: 10000; easing: linear; loop: true">
-              <a-gltf-model src="#eucariotaModel" scale="0.3 0.3 0.3"></a-gltf-model>
+              <a-gltf-model src="#eucariotaModel" scale="3 3 3"></a-gltf-model>
            </a-entity>
            <a-text value="EUKARYOTA 3D" color="#00FFFF" position="0 -0.3 0" align="center" width="2"></a-text>
         </a-entity>
